@@ -1,0 +1,39 @@
+import sqlite3
+import os
+
+DB = "videos.db"
+
+# Purana database delete kar dete hain (fresh start ke liye)
+if os.path.exists(DB):
+    os.remove(DB)
+
+conn = sqlite3.connect(DB)
+c = conn.cursor()
+
+# Videos table
+c.execute("""CREATE TABLE IF NOT EXISTS videos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                filename TEXT,
+                uploader TEXT,
+                upload_time TEXT
+            )""")
+
+# Comments table
+c.execute("""CREATE TABLE IF NOT EXISTS comments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                video_id INTEGER,
+                username TEXT,
+                comment TEXT,
+                time TEXT
+            )""")
+
+# Sample data insert (optional)
+c.execute("INSERT INTO videos (filename, uploader, upload_time) VALUES (?, ?, ?)",
+          ("demo.mp4", "Admin", "2025-08-24 12:00:00"))
+c.execute("INSERT INTO comments (video_id, username, comment, time) VALUES (?, ?, ?, ?)",
+          (1, "User1", "Nice demo video!", "2025-08-24 12:05:00"))
+
+conn.commit()
+conn.close()
+
+print("✅ Database 'videos.db' create ho gaya sample data ke sath!")
