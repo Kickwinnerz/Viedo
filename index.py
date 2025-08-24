@@ -95,4 +95,5 @@ app.jinja_env.globals.update(get_comments=get_comments)
 
 # Vercel ke liye: sirf app return karna hai
 def handler(request, response):
+
     return app(request, response)
