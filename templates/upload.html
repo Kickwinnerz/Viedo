@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Video</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:"Courier New", monospace; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; margin:0; }
+    h1 { text-shadow:0 0 10px #0f0,0 0 20px #0f0; }
+    form { background:rgba(0,255,0,0.1); border:2px solid #0f0; border-radius:15px; padding:30px; box-shadow:0 0 20px #0f0; width:400px; text-align:center; }
+    input,button { margin:10px 0; padding:10px; border:2px solid #0f0; border-radius:10px; background:#000; color:#0f0; width:90%; }
+    button:hover { background:#0f0; color:#000; box-shadow:0 0 30px #0f0; }
+    a { color:#0f0; margin-top:20px; text-decoration:none; padding:5px 15px; border:2px solid #0f0; border-radius:10px; }
+    a:hover { background:#0f0; color:#000; }
+    canvas { position:absolute; top:0; left:0; z-index:-1; }
+  </style>
+</head>
+<body>
+  <h1>🎥 Upload a Video</h1>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="text" name="uploader" placeholder="Your Name (Optional)">
+    <input type="file" name="video" accept="video/*" required>
+    <button type="submit">🚀 Upload</button>
+  </form>
+  <a href="/">⬅ Back to Home</a>
+
+  <!-- Matrix Background -->
+  <canvas id="matrix"></canvas>
+  <script>
+    const canvas=document.getElementById("matrix");const ctx=canvas.getContext("2d");
+    canvas.height=window.innerHeight;canvas.width=window.innerWidth;
+    const letters="01DEVIKINGONFIRE";const matrix=letters.split("");
+    const fontSize=14;const columns=canvas.width/fontSize;const drops=[];
+    for(let x=0;x<columns;x++)drops[x]=1;
+    function draw(){ctx.fillStyle="rgba(0,0,0,0.1)";ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="#0f0";ctx.font=fontSize+"px monospace";
+    for(let i=0;i<drops.length;i++){const text=matrix[Math.floor(Math.random()*matrix.length)];
+    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+    if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;drops[i]++;}}
+    setInterval(draw,50);
+    window.addEventListener("resize",()=>{canvas.height=window.innerHeight;canvas.width=window.innerWidth;});
+  </script>
+</body>
+</html>

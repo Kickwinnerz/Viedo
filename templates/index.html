@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Public Video Feed</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:"Courier New", monospace; }
+    header { text-align:center; padding:20px; font-size:28px; font-weight:bold; text-shadow:0 0 10px #0f0; }
+    a { color:#0f0; text-decoration:none; border:2px solid #0f0; padding:8px 16px; border-radius:10px; box-shadow:0 0 10px #0f0; transition:0.3s; }
+    a:hover { background:#0f0; color:#000; box-shadow:0 0 20px #0f0; }
+    .feed { display:flex; flex-direction:column; align-items:center; }
+    .post { background:rgba(0,255,0,0.1); border:2px solid #0f0; border-radius:15px; margin:20px; padding:15px; width:70%; box-shadow:0 0 20px #0f0; }
+    video { width:100%; border-radius:10px; border:2px solid #0f0; box-shadow:0 0 10px #0f0; }
+    h3 { margin:5px 0; text-shadow:0 0 5px #0f0; }
+    small { color:#aaa; }
+    form { margin-top:10px; }
+    input, textarea { background:#000; color:#0f0; border:1px solid #0f0; border-radius:5px; padding:5px; width:90%; margin-top:5px; }
+    button { margin-top:5px; padding:5px 10px; border:1px solid #0f0; background:#000; color:#0f0; cursor:pointer; border-radius:5px; box-shadow:0 0 10px #0f0; }
+    button:hover { background:#0f0; color:#000; }
+    .comment-box { margin-top:10px; padding:10px; border-top:1px solid #0f0; }
+  </style>
+</head>
+<body>
+  <header> Public Video Feed </header>
+  <div style="text-align:center;"><a href="/upload"> Upload New Video</a></div>
+
+  <div class="feed">
+    {% for video in videos %}
+    <div class="post">
+      <video controls>
+        <source src="{{ url_for('static', filename='uploads/' ~ video[1]) }}" type="video/mp4">
+      </video>
+      <h3> Uploaded by: {{ video[2] }}</h3>
+      <small> {{ video[3] }}</small>
+
+      <!-- Comments -->
+      <div class="comment-box">
+        <h4> Comments:</h4>
+        {% for c in get_comments(video[0]) %}
+          <p><b>{{ c[0] }}</b>: {{ c[1] }} <small>({{ c[2] }})</small></p>
+        {% endfor %}
+        <form action="/comment/{{ video[0] }}" method="post">
+          <input type="text" name="username" placeholder="Your Name">
+          <textarea name="comment" placeholder="Write a comment..." required></textarea>
+          <button type="submit">Post Comment</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
